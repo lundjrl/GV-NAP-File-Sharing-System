@@ -4,7 +4,9 @@ to communicate with an FTP server.
 
 @author Cody Chinn
 @version Winter 2019
+
 '''
+import os
 
 # pip install ftpdlib before running the client
 from ftplib import FTP
@@ -176,4 +178,12 @@ def prompt():
 # Start the client
 if __name__ == '__main__':
 	print('Python FTP Client is up and running, \nPlease use CONNECT to connect to the FTP server')
+	gw = os.popen("ip -4 route show default").read().split()
+	updatefile = open("update.txt","w")
+	updatefile.write(gw[3] + "\n")
+	currentfiles = os.listdir()
+	for i in currentfiles:
+		updatefile.write(i + "\n")
+	
 	prompt()
+
