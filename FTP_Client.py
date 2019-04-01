@@ -51,9 +51,9 @@ def store(filename):
 		# Full ftpdlib command to send a file to a server
 		ftp.storbinary('STOR ' + filename, open(filename, 'rb'))
 		print('Successfully uploaded ' + filename)
-	except:
+	except Exception as e:
 		# If the file couldn't be sent, handle the error
-		print('2')
+		print('Error'+ e)
 
 '''
 Handles the RETRIEVE request being sent to the FTP server.
@@ -93,7 +93,7 @@ def checkConnection():
 
 
 '''
-Stores the files from the client and the search term in a text file
+Stores the files from the client and the search term in a text file called update
 '''
 def createLocalDescription(search):
 	gw = os.popen("ip -4 route show default").read().split()
@@ -201,11 +201,4 @@ def prompt():
 # Start the client
 if __name__ == '__main__':
 	print('Python FTP Client is up and running, \nPlease use CONNECT to connect to the FTP server')
-	# gw = os.popen("ip -4 route show default").read().split()
-	# updatefile = open("update.txt","w")
-	# updatefile.write(gw[3] + "\n")
-	# currentfiles = os.listdir()
-	# for i in currentfiles:
-	# 	updatefile.write(i + "\n")
-	# updatefile.close()
 	prompt()

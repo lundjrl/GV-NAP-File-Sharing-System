@@ -14,31 +14,27 @@ import socket
 '''
 The main loop that starts the server
 '''
+
+def MyHandler(FTPHandler):
+    def on_file_received(self, file):
+        print('File received')
+
 def main():
-	# Creates authorization for anonymous users
-	# and gives them Read/Write access to the server
-	authorizer = DummyAuthorizer()
-	authorizer.add_anonymous('.', perm='elradfmwM')
+    authorizer = DummyAuthorizer()
+    authorizer.add_anonymous('.', perm='elradfmwM')
 
-	# Using the default pyftpdlib handler to handle
-	# requests sent to the server
-	handler = FTPHandler
-	handler.authorizer = authorizer
+    handler = MyHandler
+    handler.authorizer = authorizer
 
-	# Starts the threaded server on the localhost ip
-	# on port 1026 then runs it forever
-
-	gw = os.popen("ip -4 route show default").read().split()
-	s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-
-	s.connect((gw[3],0))
-	ipaddr = s.getsockname()[0]
-
-	server = ThreadedFTPServer((ipaddr, 1030), handler)
-	server.serve_forever()
+    gw = os.popen("ip -4 route show default").read().split()
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.connect((gw[3],0))
+    ipaddr = s.getsockname()[0]
+    server = ThreadedFTPServer((ipaddr, 1030), handler)
+    server.serve_forever()
 
 '''
 Runs the main loop
 '''
 if __name__ == "__main__":
-	main()
+    main()
