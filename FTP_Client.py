@@ -34,9 +34,9 @@ def connect(ip, port):
 		print('You\'re connected to ' + str(ip) + ' on port ' + port)
 		connected = True
 		prompt()
-	except:
+	except Exception as e:
 		# If the server can't be found, handle the error
-		print('That didn\'t work, please try another server')
+		print(e)
 		prompt()
 
 
@@ -53,12 +53,12 @@ def store(filename):
 		print('Successfully uploaded ' + filename)
 	except:
 		# If the file couldn't be sent, handle the error
-		print('That didn\'t work, please try another file')
+		print('2')
 
 '''
 Handles the RETRIEVE request being sent to the FTP server.
 
-@param filename (str) - name of the file being requested from 
+@param filename (str) - name of the file being requested from
 		  	the ftp server
 '''
 def retrieve(filename):
@@ -91,6 +91,21 @@ def checkConnection():
 
 	return connected
 
+
+'''
+Stores the files from the client and the search term in a text file
+'''
+def createLocalDescription(search):
+	gw = os.popen("ip -4 route show default").read().split()
+	updatefile = open("update.txt","w")
+	updatefile.write(gw[3] + "\n")
+	currentfiles = os.listdir()
+	for i in currentfiles:
+		updatefile.write(i + "\n")
+	updatefile.write(str(search) + '\n')
+	updatefile.close()
+
+
 '''
 The command interface for the FTP client. This is called at the
 end of every command sent to the server to keep the interface open.
@@ -118,13 +133,21 @@ def prompt():
 			print('CONNECT takes two parameters. IP and port number')
 			prompt()
 
+	elif 'SEARCH' in cmd and checkConnection():
+		cmdList = cmd.split()
+		if len(cmdList) == 2:
+			print('hit')
+			createLocalDescription(cmdList[1])
+			store('update.txt')
+			prompt()
+
 	# Handle the LIST command and check the
 	# connection to an FTP server
 	elif 'LIST' in cmd and checkConnection():
 		ftp.retrlines('LIST')
 		prompt()
 
-	# Handle the STORE command and check the 
+	# Handle the STORE command and check the
 	# connection to an FTP server
 	elif 'STORE' in cmd and checkConnection():
 		# Split the store command into a list
@@ -178,12 +201,11 @@ def prompt():
 # Start the client
 if __name__ == '__main__':
 	print('Python FTP Client is up and running, \nPlease use CONNECT to connect to the FTP server')
-	gw = os.popen("ip -4 route show default").read().split()
-	updatefile = open("update.txt","w")
-	updatefile.write(gw[3] + "\n")
-	currentfiles = os.listdir()
-	for i in currentfiles:
-		updatefile.write(i + "\n")
-	
+	# gw = os.popen("ip -4 route show default").read().split()
+	# updatefile = open("update.txt","w")
+	# updatefile.write(gw[3] + "\n")
+	# currentfiles = os.listdir()
+	# for i in currentfiles:
+	# 	updatefile.write(i + "\n")
+	# updatefile.close()
 	prompt()
-
