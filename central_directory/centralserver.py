@@ -47,6 +47,20 @@ def check_dir():
 				os.remove('update.txt')
 				continue
 				#print(data_stored) # Keep this here for testing data_stored
+		elif 'search.txt' in file_dict:
+			with open(file_dict['search.txt']) as f:
+				search = f.readlines()
+			if not search:
+				pass
+			else:
+				for ip, file_name in data_stored.items():
+					file = ''.join(file_name)
+					if search[0] in file:
+						print(ip)
+					else:
+						print('File not found')
+				os.remove('search.txt')
+				continue
 
 
 '''

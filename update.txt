@@ -1,0 +1,14 @@
+35.40.66.215
+
+.git
+.idea
+bar
+central_directory
+config.py
+foo
+FTP_Client.py
+FTP_Server.py
+test.txt
+update.txt
+_config.yml
+__pycache__

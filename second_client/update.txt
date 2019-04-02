@@ -1,7 +1,0 @@
-35.40.66.215
-
-bob.txt
-FTP_Client.py
-phil.txt
-test.txt
-update.txt
