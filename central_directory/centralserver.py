@@ -9,11 +9,11 @@ and allows read/write access to anyone
 from pyftpdlib.authorizers import DummyAuthorizer
 from pyftpdlib.handlers import FTPHandler
 from pyftpdlib.servers import ThreadedFTPServer
-import os
-import socket
 from threading import Thread
+import os, socket, csv
 
-data_stored = {}
+# filling data_stored with test values
+data_stored = {'127.0.0.1': ['new file', 'test file'], '192.168.1.1': ['file new', 'file test']}
 '''
 This is a function that needs to be kicked off in a thread.
 It continuously checks for new files in the current directory
@@ -63,6 +63,18 @@ def check_dir():
 				continue
 
 
+				
+def return_list():
+	global data_stored
+	with open('FullList.csv', 'w') as csvfile:
+		#delimiter=',', quotechar="|",quoting=csv.QUOTE_MINIMAL
+		fieldnames = ['ip', 'files']
+		filewriter = csv.DictWriter(csvfile, fieldnames=fieldnames)
+		filewriter.writeheader()
+		for key in data_stored:
+			filewriter.writerow({'ip':key, 'files':data_stored[key]})
+				
+				
 '''
 The main loop that starts the server
 '''
@@ -88,5 +100,6 @@ if __name__ == "__main__":
 	#and kick it off with .start()
 	thread = Thread(target = check_dir)
 	thread.start()
+	return_list()
 	main()
 	thread.join()
