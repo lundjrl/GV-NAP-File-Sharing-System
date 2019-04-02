@@ -22,21 +22,30 @@ which should only be update files on this server
 def check_dir():
 	global data_stored
 	while 1:
+		file_dict= {}
+	
 		files = os.listdir()
-		if len(files) > 1:
+		for file in files:
+			file_dict[file] = file
+
+		if 'update.txt' in file_dict:
 		#Read in files line by line
-			with open(files[1]) as f:
+			with open(file_dict['update.txt']) as f:
 				content = f.readlines()
-
-			# Get rid of the white space and '\n' chars
-			content = [x.strip() for x in content]
-			#Set first line of txt file to key
-			#And every line after to it's list values
-			print(content[1:len(content)])
-			data_stored[content[0]] = content[1:len(content)]
-			#print(data_stored) # Keep this here for testing data_stored
-			os.remove('update.txt')
-
+			if not content:
+				pass
+			else:
+				# Get rid of the white space and '\n' chars
+				content = [x.strip() for x in content]
+				#Set first line of txt file to key
+				#And every line after to it's list values
+				print(content[1:len(content)])
+				data_stored[content[0]] = list(content[1:len(content)])
+				
+				os.remove('update.txt')
+				continue
+				#print(data_stored) # Keep this here for testing data_stored
+		
 '''
 The main loop that starts the server
 '''
