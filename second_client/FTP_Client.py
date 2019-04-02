@@ -102,26 +102,9 @@ def createLocalDescription():
 	currentfiles = os.listdir()
 	for i in currentfiles:
 		updatefile.write(i + "\n")
-
+	
 	updatefile.close()
 	return
-
-'''
-Gets the file being searched for by the user, saves it to a file, then uploads
-that file to the central server
-'''
-def search(search_term):
-	searchfile = open("search.txt", "w")
-	searchfile.write(str(search_term))
-	searchfile.close()
-
-	ftp.connect('127.0.0.1', 1026)
-	ftp.login()
-	search = 'search.txt'
-	ftp.storbinary('STOR ' + search, open(search, 'rb'))
-	ftp.quit()
-
-	os.remove('search.txt')
 
 '''
 Using a curl call to pull in our external IP
@@ -159,11 +142,10 @@ def prompt():
 			print('CONNECT takes two parameters. IP and port number')
 			prompt()
 
-	elif 'SEARCH' in cmd:
+	elif 'SEARCH' in cmd and checkConnection():
 		cmdList = cmd.split()
 		if len(cmdList) == 2:
-			search(cmdList[1])
-
+			print('hit')
 			prompt()
 
 	# Handle the LIST command and check the

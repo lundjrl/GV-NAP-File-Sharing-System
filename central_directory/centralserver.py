@@ -23,7 +23,7 @@ def check_dir():
 	global data_stored
 	while 1:
 		file_dict= {}
-	
+
 		files = os.listdir()
 		for file in files:
 			file_dict[file] = file
@@ -39,13 +39,16 @@ def check_dir():
 				content = [x.strip() for x in content]
 				#Set first line of txt file to key
 				#And every line after to it's list values
-				print(content[1:len(content)])
+				#print(content[1:len(content)])
 				data_stored[content[0]] = list(content[1:len(content)])
-				
+				print('Dictonary')
+				print(data_stored)
+
 				os.remove('update.txt')
 				continue
 				#print(data_stored) # Keep this here for testing data_stored
-		
+
+
 '''
 The main loop that starts the server
 '''
