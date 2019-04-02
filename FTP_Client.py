@@ -95,15 +95,24 @@ def checkConnection():
 '''
 Stores the files from the client and the search term in a text file called update
 '''
-def createLocalDescription(search):
-	gw = os.popen("ip -4 route show default").read().split()
+def createLocalDescription():
+	ip = ip_getter()
 	updatefile = open("update.txt","w")
-	updatefile.write(gw[3] + "\n")
+	updatefile.write(ip + "\n")
 	currentfiles = os.listdir()
 	for i in currentfiles:
 		updatefile.write(i + "\n")
-	updatefile.write(str(search) + '\n')
+	
 	updatefile.close()
+	return
+
+'''
+Using a curl call to pull in our external IP
+'''
+def ip_getter():
+	ip = os.popen("curl https://ipinfo.io/ip").read()
+	ip.strip()
+	return ip
 
 
 '''
@@ -137,8 +146,6 @@ def prompt():
 		cmdList = cmd.split()
 		if len(cmdList) == 2:
 			print('hit')
-			createLocalDescription(cmdList[1])
-			store('update.txt')
 			prompt()
 
 	# Handle the LIST command and check the
@@ -192,13 +199,22 @@ def prompt():
 		print('You aren\'t connected to an FTP server. Please connect first')
 		prompt()
 
-	# If a command can't be found, list the coomands for the user
+	# If a command can't be found, list the commands for the user
 	else:
 		print('Valid commands are CONNECT, LIST, RETRIEVE and STORE')
-		prompt()
+		prompt
+
+def centralized_update():
+	createLocalDescription()
+	ftp.connect('127.0.0.1', 1026)
+	ftp.login()
+	update = 'update.txt'
+	ftp.storbinary('STOR ' + update, open(update, 'rb'))
+	ftp.quit()
 
 
 # Start the client
 if __name__ == '__main__':
-	print('Python FTP Client is up and running, \nPlease use CONNECT to connect to the FTP server')
-	prompt()
+    centralized_update()
+    print('Python FTP Client is up and running, \nPlease use CONNECT to connect to the FTP server')
+    prompt()
