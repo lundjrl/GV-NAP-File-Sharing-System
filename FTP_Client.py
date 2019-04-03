@@ -163,7 +163,6 @@ def prompt():
 		cmdList = cmd.split()
 		if len(cmdList) == 2:
 			search(cmdList[1])
-
 			prompt()
 
 	# Handle the LIST command and check the
@@ -219,20 +218,34 @@ def prompt():
 
 	# If a command can't be found, list the commands for the user
 	else:
-		print('Valid commands are CONNECT, LIST, RETRIEVE and STORE')
-		prompt
+		print('Valid commands are CONNECT, LIST, RETRIEVE, STORE and QUIT')
+		prompt()
 
 def centralized_update():
-	createLocalDescription()
-	ftp.connect('127.0.0.1', 1026)
-	ftp.login()
-	update = 'update.txt'
-	ftp.storbinary('STOR ' + update, open(update, 'rb'))
-	ftp.quit()
-
-
-# Start the client
+	try:
+		createLocalDescription()
+		ftp.connect('127.0.0.1', 1026)
+		ftp.login()
+		update = 'update.txt'
+		ftp.storbinary('STOR ' + update, open(update, 'rb'))
+		ftp.quit()
+	except:
+		print("could not replicate, starting client with old information")
+		
+def get_updated_list():
+	try:
+	# Cast port to int for ftpdlib then login
+		ftp.connect('127.0.0.1', 1026)
+		ftp.login()
+		print("Updated List Found")
+		retrieve('FullList.csv')
+		ftp.quit()
+	except Exception as e:
+		# If the server can't be found, handle the error
+		print(e)
+	
 if __name__ == '__main__':
     centralized_update()
+	get_updated_list()
     print('Python FTP Client is up and running, \nPlease use CONNECT to connect to the FTP server')
-    prompt()
+	prompt()

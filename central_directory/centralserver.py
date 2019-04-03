@@ -9,11 +9,16 @@ and allows read/write access to anyone
 from pyftpdlib.authorizers import DummyAuthorizer
 from pyftpdlib.handlers import FTPHandler
 from pyftpdlib.servers import ThreadedFTPServer
+from ftplib import FTP
 from threading import Thread
 import os, socket, csv
 
+
+# Create the FTP client object to send requests to the FTP servers
+ftp = FTP('')
+
 # filling data_stored with test values
-data_stored = {'127.0.0.1': ['new file', 'test file'], '192.168.1.1': ['file new', 'file test']}
+data_stored = {'192.168.1.1': ['foo', 'bar'], '192.168.1.1': ['file new', 'file test']}
 '''
 This is a function that needs to be kicked off in a thread.
 It continuously checks for new files in the current directory
