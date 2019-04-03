@@ -7,6 +7,7 @@ to communicate with an FTP server.
 
 '''
 import os
+import csv
 
 # pip install ftpdlib before running the client
 from ftplib import FTP
@@ -131,6 +132,24 @@ def ip_getter():
 	ip.strip()
 	return ip
 
+'''
+Searches the local csv file to determine if a file is present
+'''
+def local_search(term):
+	rows = []
+	with open('FullList.csv', 'r') as csv_file:
+		csv_reader = csv.reader(csv_file)
+
+		for row in csv_reader:
+			rows.append(row)
+		rows.pop(0)
+
+		for item in rows:
+			file = ''.join(item)
+		if term in file:
+			print(rows[0][0])
+		else:
+			print('file not found')
 
 '''
 The command interface for the FTP client. This is called at the
@@ -162,7 +181,8 @@ def prompt():
 	elif 'SEARCH' in cmd:
 		cmdList = cmd.split()
 		if len(cmdList) == 2:
-			search(cmdList[1])
+			#search(cmdList[1])
+			local_search(cmdList[1])
 			prompt()
 
 	# Handle the LIST command and check the
@@ -231,7 +251,7 @@ def centralized_update():
 		ftp.quit()
 	except:
 		print("could not replicate, starting client with old information")
-		
+
 def get_updated_list():
 	try:
 	# Cast port to int for ftpdlib then login
@@ -243,9 +263,9 @@ def get_updated_list():
 	except Exception as e:
 		# If the server can't be found, handle the error
 		print(e)
-	
+
 if __name__ == '__main__':
-    centralized_update()
+	centralized_update()
 	get_updated_list()
-    print('Python FTP Client is up and running, \nPlease use CONNECT to connect to the FTP server')
+	print('Python FTP Client is up and running, \nPlease use CONNECT to connect to the FTP server')
 	prompt()
