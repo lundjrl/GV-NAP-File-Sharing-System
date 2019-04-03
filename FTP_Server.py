@@ -1,7 +1,7 @@
 '''
 An FTP server module that allows anonymous login
 and allows read/write access to anyone
-@author Cody Chinn
+@author Cody Chinn, Justin Johns, James Lund, Zachary Thomas
 @version Winter 2019
 '''
 

@@ -1,8 +1,7 @@
 '''
 An FTP server module that allows anonymous login
 and allows read/write access to anyone
-
-@author Cody Chinn
+@author Cody Chinn, Justin Johns, James Lund, Zachary Thomas
 @version Winter 2019
 '''
 
@@ -18,7 +17,8 @@ import os, socket, csv
 ftp = FTP('')
 
 # filling data_stored with test values
-data_stored = {'192.168.1.1': ['foo', 'bar'], '192.168.1.1': ['file new', 'file test']}
+#data_stored = {'35.40.130.191': ['foo', 'bar'], '36.40.130.191': ['new', 'test']}
+data_stored={}
 '''
 This is a function that needs to be kicked off in a thread.
 It continuously checks for new files in the current directory
@@ -46,9 +46,9 @@ def check_dir():
 				#And every line after to it's list values
 				#print(content[1:len(content)])
 				data_stored[content[0]] = list(content[1:len(content)])
-				print('Dictonary')
-				print(data_stored)
-
+				# print('Dictonary')
+				# print(data_stored)
+				return_list(data_stored)
 				os.remove('update.txt')
 				continue
 				#print(data_stored) # Keep this here for testing data_stored
@@ -68,9 +68,11 @@ def check_dir():
 				continue
 
 
-				
-def return_list():
-	global data_stored
+
+def return_list(data_stored):
+	#global data_stored
+	print(data_stored)
+	file_list = []
 	with open('FullList.csv', 'w') as csvfile:
 		#delimiter=',', quotechar="|",quoting=csv.QUOTE_MINIMAL
 		fieldnames = ['ip', 'files']
@@ -78,8 +80,8 @@ def return_list():
 		filewriter.writeheader()
 		for key in data_stored:
 			filewriter.writerow({'ip':key, 'files':data_stored[key]})
-				
-				
+
+
 '''
 The main loop that starts the server
 '''
@@ -104,7 +106,8 @@ if __name__ == "__main__":
 	#Create the thread for continuous checking
 	#and kick it off with .start()
 	thread = Thread(target = check_dir)
+
 	thread.start()
-	return_list()
+	#return_list()
 	main()
 	thread.join()

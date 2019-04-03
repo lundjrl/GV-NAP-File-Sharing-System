@@ -2,7 +2,7 @@
 FTP Client module. Handles commands CONNECT, LIST, STORE and RETRIEVE
 to communicate with an FTP server.
 
-@author Cody Chinn
+@author Cody Chinn, Justin Johns, James Lund, Zachary Thomas
 @version Winter 2019
 
 '''
