@@ -146,10 +146,12 @@ def local_search(term):
 
 		for item in rows:
 			file = ''.join(item)
-		if term in file:
-			print(rows[0][0])
-		else:
-			print('file not found')
+			i = 0
+			if term in file:
+				print(rows[i][0])
+			else:
+				i+=1
+
 
 '''
 The command interface for the FTP client. This is called at the
